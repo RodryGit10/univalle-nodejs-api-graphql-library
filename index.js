@@ -17,7 +17,7 @@ const typeDefs = `#graphql
 
   type Author {
     name: String
-    nacionality: String
+    nationality: String
   }
 
   # This "Book" type defines the queryable fields for every book in our data source.
@@ -29,7 +29,7 @@ const typeDefs = `#graphql
     publisher: String!
     gender: Gender!
     publishYear: Int
-    author: String!
+    author: Author!
   }
 
   # The "Query" type is special: it lists all of the available queries that
@@ -76,6 +76,15 @@ const resolvers = {
       return books.find(book => book.id === id);
     },
   },
+
+  Book: {
+    author: (root) => {
+      return {
+        name: root.authorName,
+        nationality: root.authorNationality
+      }
+    }
+  }
 };
 
 
