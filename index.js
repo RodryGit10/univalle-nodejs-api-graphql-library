@@ -42,6 +42,8 @@ const typeDefs = `#graphql
     getAllBooks: [Book]
     getBook(id: String): Book
     getAllBooksByAuthor(authorName: String): [Book]
+
+    getAllPosts
   }
 
   type Mutation {
