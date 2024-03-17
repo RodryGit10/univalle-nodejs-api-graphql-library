@@ -67,6 +67,10 @@ const typeDefs = `#graphql
       authorName: String!
       authorNationality: String
     ): Book
+
+    deleteBook (
+      id: String!
+    ): Book
   }
 `;
 
@@ -151,6 +155,13 @@ const resolvers = {
         };
         books[updateBookIndex] = updateBook;
         return updateBook;
+    },
+
+    deleteBook: (root, {id}) =>{
+      const deleteBookIndex = books.findIndex(book => book.id ===id);
+      if(deleteBookIndex === -1) return null;
+      const deleteBook = books.splice(deleteBookIndex, 1)[0];
+      return deleteBook;
     }
   }
 };
