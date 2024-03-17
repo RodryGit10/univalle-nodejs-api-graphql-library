@@ -1,5 +1,5 @@
 {
-    "books": [
+  "books": [
     {
       "id": "d26fd654-f4d4-4b98-91e5-6d8c9569aed6",
       "title": "The Awakening",
@@ -19,6 +19,13 @@
       "publishYear": "2009",
       "authorName": "Paul Auster",
       "authorNationality": "Estadounidense"
+    },
+    {
+      "id": "59e2",
+      "title": "El Principito",
+      "publisher": "Sin registro",
+      "gender": "FANTASY",
+      "authorName": "Rodrygo"
     }
   ]
 }

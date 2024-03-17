@@ -74,6 +74,17 @@ const typeDefs = `#graphql
     deleteBook (
       id: String!
     ): Book
+
+    addBookInRestApi (
+      title: String!
+      description: String
+      isbn: String
+      publisher: String!
+      gender: Gender!
+      publishYear: Int
+      authorName: String!
+      authorNationality: String
+    ): Book
   }
 `;
 
@@ -171,6 +182,20 @@ const resolvers = {
       if(deleteBookIndex === -1) return null;
       const deleteBook = books.splice(deleteBookIndex, 1)[0];
       return deleteBook;
+    },
+
+    addBookInRestApi: async(root, args) => {
+      const responseExistsBook = await axios.get('http://localhost:3000/books?title=' + args.title);
+      if(responseExistsBook.data.length > 0) {
+        throw new GraphQLError('title must be unique',{
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+      const newBook = {...args};
+      const response = await axios.post('http://localhost:3000/books', newBook);
+      return response.data;
     }
   }
 };
