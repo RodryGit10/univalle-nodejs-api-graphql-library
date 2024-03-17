@@ -55,6 +55,18 @@ const typeDefs = `#graphql
       authorName: String!
       authorNationality: String
     ): Book
+
+    updateBook (
+      id: String!
+      title: String
+      description: String
+      isbn: String
+      publisher: String!
+      gender: Gender!
+      publishYear: Int
+      authorName: String!
+      authorNationality: String
+    ): Book
   }
 `;
 
@@ -95,15 +107,19 @@ const resolvers = {
   },
 
   Query: {
+    //Para contar el numero de libros
     getBooksCount: () => books.length,
+    //Para obtener todos los libros registrados
     getAllBooks: () => books,
+    // Para obtener un libro por su ID
     getBook: (root, args) => {
       const {id} = args;
       return books.find(book => book.id === id);
     },
+    // Para obtner todos los libros de un autor 
     getAllBooksByAuthor: (root, {authorName}) => books.filter(book => book.authorName === authorName)
   },
-
+  // Para insertar Datos, verificando que el titulo sea unico
   Mutation: {
     addBook: (root, args) => {
       if(books.find(b => b.title === args.title)) {
@@ -116,6 +132,25 @@ const resolvers = {
       const newBook = {...args, id: uuid()};
       books.push(newBook);
       return newBook;
+    },
+
+    updateBook: (root, args) => {
+      const updateBookIndex = books.findIndex(book => book.id === args.id);
+      if(updateBookIndex === -1) return null;
+
+      const book = books[updateBookIndex];
+      const updateBook = {...book,
+        title: args.title ? args.title : book.title,
+        description: args.description ? args.description : book.description,
+        isbn: args.isbn ? args.isbn : book.isbn,
+        publisher: args.publisher ? args.publisher : book.publisher,
+        gender: args.gender ? args.gender : book.gender,
+        publishYear: args.publishYear ? args.publishYear : book.publishYear,
+        authorName: args.authorName ? args.authorName : book.authorName,
+        authorNationality: args.authorNationality ? args.authorNationality : book.authorNational,
+        };
+        books[updateBookIndex] = updateBook;
+        return updateBook;
     }
   }
 };
