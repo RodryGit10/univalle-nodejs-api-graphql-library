@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import axios from 'axios';
 import { GraphQLError } from 'graphql';
 import { v4 as uuid } from 'uuid';
 
@@ -43,7 +44,7 @@ const typeDefs = `#graphql
     getBook(id: String): Book
     getAllBooksByAuthor(authorName: String): [Book]
 
-    getAllPosts
+    getAllBooksFromRestApi: [Book]
   }
 
   type Mutation {
@@ -123,8 +124,14 @@ const resolvers = {
       return books.find(book => book.id === id);
     },
     // Para obtner todos los libros de un autor 
-    getAllBooksByAuthor: (root, {authorName}) => books.filter(book => book.authorName === authorName)
+    getAllBooksByAuthor: (root, {authorName}) => books.filter(book => book.authorName === authorName),
+
+    getAllBooksFromRestApi: async(root, args) => {
+      const {data: booksFromRestApi} = await axios.get('http://localhost:3000/books');
+      return booksFromRestApi
+    },
   },
+
   // Para insertar Datos, verificando que el titulo sea unico
   Mutation: {
     addBook: (root, args) => {
