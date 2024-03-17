@@ -100,6 +100,10 @@ const typeDefs = `#graphql
       authorName: String
       authorNationality: String
     ): Book
+
+    deleteBookInRestApi (
+      id: String!
+    ): Book
   }
 `;
 
@@ -235,6 +239,21 @@ const resolvers = {
       };
 
       const response = await axios.put(process.env.API_URL + '/books/' + book.id, updatedBook);
+      return response.data;
+    },
+
+    deleteBookInRestApi: async (root, {id}) => {
+      // const responseExistsBook = await axios.get(process.env.API_URL + '/books/' + args.id)
+      //   .catch(function (error) {
+      //     return null;
+      //   });
+
+      // if (deletedBookIndex === -1) return null;
+
+      // const deletedBook = books.splice(deletedBookIndex, 1)[0];
+      // return deletedBook;
+
+      const response = await axios.delete(process.env.API_URL + '/books/' + id);
       return response.data;
     },
   }
